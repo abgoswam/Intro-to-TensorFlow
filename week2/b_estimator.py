@@ -101,7 +101,8 @@ def print_rmse(model, name, df):
 
 print_rmse(model, 'validation', df_valid)
 
-# This is nowhere near our benchmark (RMSE of $6 or so on this data), but it serves to demonstrate what TensorFlow code looks like.  Let's use this model for prediction.
+# This is nowhere near our benchmark (RMSE of $6 or so on this data), but it serves to demonstrate what TensorFlow
+# code looks like.  Let's use this model for prediction.
 
 # In[ ]:
 
