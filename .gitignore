@@ -1,5 +1,8 @@
 # ignore TF model folders
-
+.idea/
+.idea/Intro-to-TensorFlow.iml
+.idea/misc.xml
+.idea/workspace.xml
 taxi_trained/
 
 # Byte-compiled / optimized / DLL files
