@@ -27,7 +27,7 @@ b1 = tf.get_variable(name="AG_b1", shape=[10])
 # define our graph (e.g. two_layer_convnet)
 a1 = tf.nn.conv2d(X, Wconv1, strides=[1, 2, 2, 1], padding='VALID') + bconv1
 h1 = tf.nn.relu(a1, name="AG_ConvRelu_1")
-h1_flat = tf.reshape(h1, [-1, 5408])
+h1_flat = tf.reshape(h1, [-1, 5408], name="AG_Bottleneck")
 y_out = tf.matmul(h1_flat, W1, name="AG_FC_1") + b1
 
 # softmax
@@ -61,8 +61,9 @@ with tf.Session() as sess:
         loss_history.append(loss_i)
 
     print('test accuracy %g' % accuracy.eval(feed_dict={X: X_val, y: y_val}))
-
-    export_dir = "model_two_layer_convnet-{0}".format(str(uuid.uuid4()))
+    uuid = str(uuid.uuid4())
+    print(uuid)
+    export_dir = "model_two_layer_convnet-{0}".format(uuid)
     tf.saved_model.simple_save(sess,
                                export_dir,
                                inputs={"Input": X},
