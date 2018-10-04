@@ -4,3 +4,5 @@
 [submodule "TensorFlow-Examples"]
 	path = TensorFlow-Examples
 	url = https://github.com/aymericdamien/TensorFlow-Examples.git
+	ignore = dirty
+
