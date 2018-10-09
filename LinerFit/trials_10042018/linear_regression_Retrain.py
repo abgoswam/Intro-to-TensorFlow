@@ -27,11 +27,13 @@ with tf.Session(graph=tf.Graph()) as sess:
     cost = tf.reduce_sum(tf.pow(pred2 - Y, 2)) / (2 * n_samples)
 
     # Step 2 : one step of training
-    optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+    optimizer_partial = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost, var_list=[W2, b2])
+    optimizer_full = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
     W1 = graph.get_tensor_by_name('AG_weight:0')
     b1 = graph.get_tensor_by_name('AG_bias:0')
     print("W1={0} b1={1}".format(sess.run(W1), sess.run(b1)))
+    # print("W2={0} b2={1}".format(sess.run(W2), sess.run(b2)))
 
     # Initialize the variables (i.e. assign their default value)
     # init = tf.global_variables_initializer()
@@ -39,11 +41,12 @@ with tf.Session(graph=tf.Graph()) as sess:
     sess.run(init)
 
     print("W1={0} b1={1}".format(sess.run(W1), sess.run(b1)))
+    print("W2={0} b2={1}".format(sess.run(W2), sess.run(b2)))
 
-    # Fit all training data
+    # Optimize the new layers only using optimize_partial)
     for epoch in range(training_epochs):
         for (x, y) in zip(train_X, train_Y):
-            sess.run(optimizer, feed_dict={X: x, Y: y})
+            sess.run(optimizer_partial, feed_dict={X: x, Y: y})
 
         c = sess.run(cost, feed_dict={X: train_X, Y: train_Y})
         print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(c), "W2=", sess.run(W2), "b2=", sess.run(b2))
@@ -55,3 +58,19 @@ with tf.Session(graph=tf.Graph()) as sess:
     test_X = np.asarray([6.83, 4.668, 8.9])
     test_Y = sess.run(pred2, feed_dict={X: test_X})
     print("prediction : {0}".format(test_Y))
+
+    # # Optimize the entire graph optimize_full
+    # for epoch in range(training_epochs):
+    #     for (x, y) in zip(train_X, train_Y):
+    #         sess.run(optimizer_full, feed_dict={X: x, Y: y})
+    #
+    #     c = sess.run(cost, feed_dict={X: train_X, Y: train_Y})
+    #     print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(c), "W2=", sess.run(W2), "b2=", sess.run(b2))
+    #
+    # print("Optimization Finished!")
+    # print("W1={0} b1={1}".format(sess.run(W1), sess.run(b1)))
+    # print("W2=", sess.run(W2), "b2=", sess.run(b2))
+    #
+    # test_X = np.asarray([6.83, 4.668, 8.9])
+    # test_Y = sess.run(pred2, feed_dict={X: test_X})
+    # print("prediction : {0}".format(test_Y))
